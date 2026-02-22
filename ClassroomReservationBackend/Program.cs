@@ -1,10 +1,11 @@
 using ClassroomReservationBackend.Data;
 using ClassroomReservationBackend.Middleware;
-using ClassroomReservationBackend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ClassroomReservationBackend.Service.AuthService;
+using ClassroomReservationBackend.Service.ClassroomService;
 
 var builder = WebApplication.CreateBuilder(args);
 

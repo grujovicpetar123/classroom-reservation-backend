@@ -1,6 +1,8 @@
-﻿using ClassroomReservationBackend.Models.DTOs;
+﻿using ClassroomReservationBackend.Model.DTO.ClassroomDTO;
+using ClassroomReservationBackend.Model.DTO;
+using ClassroomReservationBackend.Model.DTO.ClassroomDTO;
 
-namespace ClassroomReservationBackend.Services;
+namespace ClassroomReservationBackend.Service.ClassroomService;
 
 public interface IClassroomService
 {

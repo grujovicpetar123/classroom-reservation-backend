@@ -1,4 +1,5 @@
-using ClassroomReservationBackend.Models;
+using ClassroomReservationBackend.Model;
+using ClassroomReservationBackend.Model.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassroomReservationBackend.Data;

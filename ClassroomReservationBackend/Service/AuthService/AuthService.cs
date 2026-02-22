@@ -3,12 +3,15 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using ClassroomReservationBackend.Data;
-using ClassroomReservationBackend.Models;
-using ClassroomReservationBackend.Models.DTOs;
+using ClassroomReservationBackend.Model.DTO;
+using ClassroomReservationBackend.Model.Entity;
+using ClassroomReservationBackend.Model;
+using ClassroomReservationBackend.Model.DTO;
+using ClassroomReservationBackend.Service.AuthService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ClassroomReservationBackend.Services;
+namespace ClassroomReservationBackend.Service.AuthService;
 
 public class AuthService : IAuthService
 {

@@ -1,4 +1,4 @@
-namespace ClassroomReservationBackend.Models.DTOs;
+namespace ClassroomReservationBackend.Model.DTO;
 
 public class AuthResponse
 {

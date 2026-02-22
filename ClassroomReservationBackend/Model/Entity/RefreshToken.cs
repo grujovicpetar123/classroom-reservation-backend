@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ClassroomReservationBackend.Models;
+namespace ClassroomReservationBackend.Model.Entity;
 
 [Table("refresh_tokens")]
 public class RefreshToken

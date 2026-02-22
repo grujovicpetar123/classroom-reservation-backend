@@ -1,9 +1,9 @@
-﻿using ClassroomReservationBackend.Models.DTOs;
-using ClassroomReservationBackend.Services;
+﻿using ClassroomReservationBackend.Model.DTO.ClassroomDTO;
+using ClassroomReservationBackend.Service.ClassroomService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ClassroomReservationBackend.Controllers;
+namespace ClassroomReservationBackend.Controller;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -1,6 +1,6 @@
-using ClassroomReservationBackend.Models.DTOs;
+using ClassroomReservationBackend.Model.DTO;
 
-namespace ClassroomReservationBackend.Services;
+namespace ClassroomReservationBackend.Service.AuthService;
 
 public interface IAuthService
 {
