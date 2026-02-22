@@ -20,7 +20,8 @@ namespace ClassroomReservationBackend.Migrations
                     room_number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     location = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     capacity = table.Column<int>(type: "integer", nullable: false),
-                    classroom_type = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    classroom_type =
+                        table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     has_projector = table.Column<bool>(type: "boolean", nullable: false),
                     has_whiteboard = table.Column<bool>(type: "boolean", nullable: false),
                     has_computers = table.Column<bool>(type: "boolean", nullable: false),
@@ -29,10 +30,7 @@ namespace ClassroomReservationBackend.Migrations
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_classrooms", x => x.id);
-                });
+                constraints: table => { table.PrimaryKey("PK_classrooms", x => x.id); });
 
             migrationBuilder.CreateTable(
                 name: "users",
@@ -42,17 +40,15 @@ namespace ClassroomReservationBackend.Migrations
                     first_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     last_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    password_hash = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    password_hash =
+                        table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     role = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     phone_number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_users", x => x.id);
-                });
+                constraints: table => { table.PrimaryKey("PK_users", x => x.id); });
 
             migrationBuilder.CreateTable(
                 name: "refresh_tokens",
@@ -65,8 +61,7 @@ namespace ClassroomReservationBackend.Migrations
                     is_revoked = table.Column<bool>(type: "boolean", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_refresh_tokens", x => x.id);
                     table.ForeignKey(
                         name: "FK_refresh_tokens_users_user_id",
@@ -95,8 +90,7 @@ namespace ClassroomReservationBackend.Migrations
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_reservations", x => x.id);
                     table.CheckConstraint("chk_reservation_time", "end_time > start_time");
                     table.ForeignKey(

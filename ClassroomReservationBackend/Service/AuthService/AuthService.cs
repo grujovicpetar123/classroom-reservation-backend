@@ -5,9 +5,6 @@ using System.Text;
 using ClassroomReservationBackend.Data;
 using ClassroomReservationBackend.Model.DTO;
 using ClassroomReservationBackend.Model.Entity;
-using ClassroomReservationBackend.Model;
-using ClassroomReservationBackend.Model.DTO;
-using ClassroomReservationBackend.Service.AuthService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 

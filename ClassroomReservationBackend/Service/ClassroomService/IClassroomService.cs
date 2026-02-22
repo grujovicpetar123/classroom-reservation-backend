@@ -1,6 +1,4 @@
 ﻿using ClassroomReservationBackend.Model.DTO.ClassroomDTO;
-using ClassroomReservationBackend.Model.DTO;
-using ClassroomReservationBackend.Model.DTO.ClassroomDTO;
 
 namespace ClassroomReservationBackend.Service.ClassroomService;
 

@@ -1,9 +1,6 @@
 ﻿using ClassroomReservationBackend.Data;
 using ClassroomReservationBackend.Model.DTO.ClassroomDTO;
 using ClassroomReservationBackend.Model.Entity;
-using ClassroomReservationBackend.Model;
-using ClassroomReservationBackend.Model.DTO.ClassroomDTO;
-using ClassroomReservationBackend.Service.ClassroomService;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassroomReservationBackend.Service.ClassroomService;
@@ -27,7 +24,7 @@ public class ClassroomService : IClassroomService
     public async Task<ClassroomResponse> GetByIdAsync(Guid id)
     {
         var classroom = await _context.Classrooms.FindAsync(id)
-            ?? throw new KeyNotFoundException("Classroom not found.");
+                        ?? throw new KeyNotFoundException("Classroom not found.");
 
         return MapToResponse(classroom);
     }
@@ -60,7 +57,7 @@ public class ClassroomService : IClassroomService
     public async Task<ClassroomResponse> UpdateAsync(Guid id, UpdateClassroomRequest request)
     {
         var classroom = await _context.Classrooms.FindAsync(id)
-            ?? throw new KeyNotFoundException("Classroom not found.");
+                        ?? throw new KeyNotFoundException("Classroom not found.");
 
         if (request.Name != null) classroom.Name = request.Name;
         if (request.RoomNumber != null) classroom.RoomNumber = request.RoomNumber;
@@ -82,7 +79,7 @@ public class ClassroomService : IClassroomService
     public async Task DeleteAsync(Guid id)
     {
         var classroom = await _context.Classrooms.FindAsync(id)
-            ?? throw new KeyNotFoundException("Classroom not found.");
+                        ?? throw new KeyNotFoundException("Classroom not found.");
 
         _context.Classrooms.Remove(classroom);
         await _context.SaveChangesAsync();
