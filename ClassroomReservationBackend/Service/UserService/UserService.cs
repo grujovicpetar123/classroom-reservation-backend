@@ -1,7 +1,6 @@
 using ClassroomReservationBackend.Data;
 using ClassroomReservationBackend.Model.DTO.UserDTO;
 using Microsoft.EntityFrameworkCore;
-using ClassroomReservationBackend.Model.Entity;
 
 namespace ClassroomReservationBackend.Service.UserService;
 
@@ -18,8 +17,7 @@ public class UserService : IUserService
     {
         var query = _context.Users.AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(search))
-        {
+        if (!string.IsNullOrWhiteSpace(search)) {
             var lower = search.ToLower();
             query = query.Where(u =>
                 u.FirstName.ToLower().Contains(lower) ||
@@ -37,7 +35,7 @@ public class UserService : IUserService
     public async Task<UserResponse> GetByIdAsync(Guid id)
     {
         var user = await _context.Users.FindAsync(id)
-            ?? throw new KeyNotFoundException("User not found.");
+                   ?? throw new KeyNotFoundException("User not found.");
 
         return MapToResponse(user);
     }
@@ -45,18 +43,18 @@ public class UserService : IUserService
     public async Task<UserResponse> UpdateAsync(Guid id, UpdateUserRequest request)
     {
         var user = await _context.Users.FindAsync(id)
-            ?? throw new KeyNotFoundException("User not found.");
+                   ?? throw new KeyNotFoundException("User not found.");
 
         if (request.FirstName != null) user.FirstName = request.FirstName;
         if (request.LastName != null) user.LastName = request.LastName;
         if (request.PhoneNumber != null) user.PhoneNumber = request.PhoneNumber;
-        if (request.Role != null)
-        {
+        if (request.Role != null) {
             var validRoles = new[] { "Admin", "User" };
             if (!validRoles.Contains(request.Role))
                 throw new ArgumentException("Invalid role. Valid values: Admin, User");
             user.Role = request.Role;
         }
+
         if (request.IsActive.HasValue) user.IsActive = request.IsActive.Value;
         user.UpdatedAt = DateTime.UtcNow;
 
@@ -67,7 +65,7 @@ public class UserService : IUserService
     public async Task<UserResponse> UpdateSelfAsync(Guid id, UpdateUserRequest request)
     {
         var user = await _context.Users.FindAsync(id)
-            ?? throw new KeyNotFoundException("User not found.");
+                   ?? throw new KeyNotFoundException("User not found.");
 
         // Self-update: no role or isActive changes allowed
         if (request.FirstName != null) user.FirstName = request.FirstName;
@@ -82,7 +80,7 @@ public class UserService : IUserService
     public async Task ChangePasswordAsync(Guid id, ChangePasswordRequest request)
     {
         var user = await _context.Users.FindAsync(id)
-            ?? throw new KeyNotFoundException("User not found.");
+                   ?? throw new KeyNotFoundException("User not found.");
 
         if (!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash))
             throw new UnauthorizedAccessException("Current password is incorrect.");
@@ -96,13 +94,13 @@ public class UserService : IUserService
     public async Task DeleteAsync(Guid id)
     {
         var user = await _context.Users.FindAsync(id)
-            ?? throw new KeyNotFoundException("User not found.");
+                   ?? throw new KeyNotFoundException("User not found.");
 
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();
     }
 
-    private static UserResponse MapToResponse(User u) => new()
+    private static UserResponse MapToResponse(Model.Entity.User u) => new()
     {
         Id = u.Id,
         FirstName = u.FirstName,

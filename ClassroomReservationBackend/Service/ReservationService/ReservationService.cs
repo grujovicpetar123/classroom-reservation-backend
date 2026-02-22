@@ -1,5 +1,4 @@
 using ClassroomReservationBackend.Data;
-using ClassroomReservationBackend.Model;
 using ClassroomReservationBackend.Model.DTO.ReservationDTO;
 using ClassroomReservationBackend.Model.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +30,8 @@ public class ReservationService : IReservationService
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<ReservationResponse>> GetMyReservationsAsync(Guid userId, ReservationFilterRequest filter)
+    public async Task<IEnumerable<ReservationResponse>> GetMyReservationsAsync(Guid userId,
+        ReservationFilterRequest filter)
     {
         var query = _context.Reservations
             .Include(r => r.Classroom)
@@ -51,11 +51,11 @@ public class ReservationService : IReservationService
     public async Task<ReservationResponse> GetByIdAsync(Guid id)
     {
         var reservation = await _context.Reservations
-            .Include(r => r.Classroom)
-            .Include(r => r.User)
-            .Include(r => r.ApprovedByUser)
-            .FirstOrDefaultAsync(r => r.Id == id)
-            ?? throw new KeyNotFoundException("Reservation not found.");
+                              .Include(r => r.Classroom)
+                              .Include(r => r.User)
+                              .Include(r => r.ApprovedByUser)
+                              .FirstOrDefaultAsync(r => r.Id == id)
+                          ?? throw new KeyNotFoundException("Reservation not found.");
 
         return MapToResponse(reservation);
     }
@@ -68,14 +68,12 @@ public class ReservationService : IReservationService
         if (request.StartTime < DateTime.UtcNow)
             throw new ArgumentException("Cannot create a reservation in the past.");
 
-        // Check classroom exists and is active
         var classroom = await _context.Classrooms.FindAsync(request.ClassroomId)
-            ?? throw new KeyNotFoundException("Classroom not found.");
+                        ?? throw new KeyNotFoundException("Classroom not found.");
 
         if (!classroom.IsActive)
             throw new InvalidOperationException("Classroom is not available.");
 
-        // Check for time conflicts (only against Pending or Approved reservations)
         var hasConflict = await _context.Reservations.AnyAsync(r =>
             r.ClassroomId == request.ClassroomId &&
             r.Status != "Rejected" &&
@@ -108,10 +106,11 @@ public class ReservationService : IReservationService
         return await GetByIdAsync(reservation.Id);
     }
 
-    public async Task<ReservationResponse> UpdateAsync(Guid id, Guid userId, bool isAdmin, UpdateReservationRequest request)
+    public async Task<ReservationResponse> UpdateAsync(Guid id, Guid userId, bool isAdmin,
+        UpdateReservationRequest request)
     {
         var reservation = await _context.Reservations.FindAsync(id)
-            ?? throw new KeyNotFoundException("Reservation not found.");
+                          ?? throw new KeyNotFoundException("Reservation not found.");
 
         if (!isAdmin && reservation.UserId != userId)
             throw new UnauthorizedAccessException("You can only edit your own reservations.");
@@ -125,7 +124,6 @@ public class ReservationService : IReservationService
         if (newEnd <= newStart)
             throw new ArgumentException("End time must be after start time.");
 
-        // Check for conflicts (excluding this reservation)
         var hasConflict = await _context.Reservations.AnyAsync(r =>
             r.Id != id &&
             r.ClassroomId == reservation.ClassroomId &&
@@ -157,7 +155,7 @@ public class ReservationService : IReservationService
             throw new ArgumentException($"Invalid status. Valid values: {string.Join(", ", validStatuses)}");
 
         var reservation = await _context.Reservations.FindAsync(id)
-            ?? throw new KeyNotFoundException("Reservation not found.");
+                          ?? throw new KeyNotFoundException("Reservation not found.");
 
         if (reservation.Status != "Pending")
             throw new InvalidOperationException("Only pending reservations can be approved or rejected.");
@@ -165,8 +163,7 @@ public class ReservationService : IReservationService
         reservation.Status = request.Status;
         reservation.UpdatedAt = DateTime.UtcNow;
 
-        if (request.Status == "Approved")
-        {
+        if (request.Status == "Approved") {
             reservation.ApprovedBy = adminId;
             reservation.ApprovedAt = DateTime.UtcNow;
         }
@@ -179,7 +176,7 @@ public class ReservationService : IReservationService
     public async Task DeleteAsync(Guid id, Guid userId, bool isAdmin)
     {
         var reservation = await _context.Reservations.FindAsync(id)
-            ?? throw new KeyNotFoundException("Reservation not found.");
+                          ?? throw new KeyNotFoundException("Reservation not found.");
 
         if (!isAdmin && reservation.UserId != userId)
             throw new UnauthorizedAccessException("You can only delete your own reservations.");
@@ -239,5 +236,3 @@ public class ReservationService : IReservationService
         UpdatedAt = r.UpdatedAt
     };
 }
-
-

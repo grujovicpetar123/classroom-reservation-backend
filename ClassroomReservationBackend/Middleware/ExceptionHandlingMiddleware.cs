@@ -14,12 +14,10 @@ public class ExceptionHandlingMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        try
-        {
+        try {
             await _next(context);
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -29,9 +27,9 @@ public class ExceptionHandlingMiddleware
         var statusCode = exception switch
         {
             UnauthorizedAccessException => HttpStatusCode.Unauthorized,
-            InvalidOperationException   => HttpStatusCode.Conflict,
-            KeyNotFoundException        => HttpStatusCode.NotFound,
-            _                           => HttpStatusCode.InternalServerError
+            InvalidOperationException => HttpStatusCode.Conflict,
+            KeyNotFoundException => HttpStatusCode.NotFound,
+            _ => HttpStatusCode.InternalServerError
         };
 
         var response = new

@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using ClassroomReservationBackend.Model.DTO.UserDTO;
 using ClassroomReservationBackend.Service.UserService;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +18,6 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    /// <summary>
-    /// Get all users with optional name/email search (Admin only).
-    /// </summary>
     [HttpGet]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll([FromQuery] string? search)
@@ -29,9 +26,6 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
-    /// <summary>
-    /// Get a user by ID (Admin only).
-    /// </summary>
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetById(Guid id)
@@ -40,42 +34,27 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    /// <summary>
-    /// Get own profile.
-    /// </summary>
     [HttpGet("me")]
     public async Task<IActionResult> GetMe()
     {
-        var userId = GetUserId();
-        var user = await _userService.GetByIdAsync(userId);
+        var user = await _userService.GetByIdAsync(GetUserId());
         return Ok(user);
     }
 
-    /// <summary>
-    /// Update own profile (name, phone).
-    /// </summary>
     [HttpPut("me")]
     public async Task<IActionResult> UpdateMe([FromBody] UpdateUserRequest request)
     {
-        var userId = GetUserId();
-        var user = await _userService.UpdateSelfAsync(userId, request);
+        var user = await _userService.UpdateSelfAsync(GetUserId(), request);
         return Ok(user);
     }
 
-    /// <summary>
-    /// Change own password.
-    /// </summary>
     [HttpPost("me/change-password")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
     {
-        var userId = GetUserId();
-        await _userService.ChangePasswordAsync(userId, request);
+        await _userService.ChangePasswordAsync(GetUserId(), request);
         return NoContent();
     }
 
-    /// <summary>
-    /// Admin: update any user (role, isActive, etc.).
-    /// </summary>
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserRequest request)
@@ -84,9 +63,6 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    /// <summary>
-    /// Admin: delete a user.
-    /// </summary>
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
@@ -98,10 +74,8 @@ public class UserController : ControllerBase
     private Guid GetUserId()
     {
         var value = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-            ?? User.FindFirst("sub")?.Value
-            ?? throw new UnauthorizedAccessException("User ID not found in token.");
+                    ?? User.FindFirst("sub")?.Value
+                    ?? throw new UnauthorizedAccessException("User ID not found in token.");
         return Guid.Parse(value);
     }
 }
-
-

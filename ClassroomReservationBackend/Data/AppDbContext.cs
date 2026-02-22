@@ -1,10 +1,14 @@
-using ClassroomReservationBackend.Models;
+using ClassroomReservationBackend.Model;
+using ClassroomReservationBackend.Model.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassroomReservationBackend.Data;
+
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Classroom> Classrooms => Set<Classroom>();
@@ -16,20 +20,13 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // === USER ===
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasIndex(u => u.Email).IsUnique();
-        });
+        modelBuilder.Entity<User>(entity => { entity.HasIndex(u => u.Email).IsUnique(); });
 
         // === CLASSROOM ===
-        modelBuilder.Entity<Classroom>(entity =>
-        {
-            entity.HasIndex(c => c.ClassroomType);
-        });
+        modelBuilder.Entity<Classroom>(entity => { entity.HasIndex(c => c.ClassroomType); });
 
         // === RESERVATION ===
-        modelBuilder.Entity<Reservation>(entity =>
-        {
+        modelBuilder.Entity<Reservation>(entity => {
             entity.HasIndex(r => r.Status);
             entity.HasIndex(r => new { r.StartTime, r.EndTime });
 
@@ -56,8 +53,7 @@ public class AppDbContext : DbContext
         });
 
         // === REFRESH TOKEN ===
-        modelBuilder.Entity<RefreshToken>(entity =>
-        {
+        modelBuilder.Entity<RefreshToken>(entity => {
             entity.HasIndex(rt => rt.Token).IsUnique();
 
             entity.HasOne(rt => rt.User)
@@ -85,11 +81,9 @@ public class AppDbContext : DbContext
         var entries = ChangeTracker.Entries()
             .Where(e => e.State == EntityState.Modified);
 
-        foreach (var entry in entries)
-        {
+        foreach (var entry in entries) {
             var updatedAtProp = entry.Properties.FirstOrDefault(p => p.Metadata.Name == "UpdatedAt");
-            if (updatedAtProp != null)
-            {
+            if (updatedAtProp != null) {
                 updatedAtProp.CurrentValue = DateTime.UtcNow;
             }
         }
