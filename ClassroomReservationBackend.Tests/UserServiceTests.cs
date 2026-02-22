@@ -127,4 +127,38 @@ public class UserServiceTests
         var deleted = await _context.Users.FindAsync(user.Id);
         Assert.That(deleted, Is.Null);
     }
+    [Test]
+    public async Task GetAllAsync_WhenSearchByName_ReturnsMatchingUsers()
+    {
+        _context.Users.AddRange(
+            new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john@test.com",
+                PasswordHash = "hash",
+                Role = "User",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            },
+            new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Jane",
+                LastName = "Smith",
+                Email = "jane@test.com",
+                PasswordHash = "hash",
+                Role = "User",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            }
+        );
+        await _context.SaveChangesAsync();
+        var result = await _service.GetAllAsync("John");
+        Assert.That(result.Count(), Is.EqualTo(1));
+        Assert.That(result.First().FirstName, Is.EqualTo("John"));
+    }
 }
