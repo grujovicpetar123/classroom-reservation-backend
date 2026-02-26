@@ -10,10 +10,10 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Classroom> Classrooms => Set<Classroom>();
-    public DbSet<Reservation> Reservations => Set<Reservation>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Classroom> Classrooms { get; set; }
+    public virtual DbSet<Reservation> Reservations { get; set; }
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
