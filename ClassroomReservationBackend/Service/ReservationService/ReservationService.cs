@@ -88,6 +88,8 @@ public class ReservationService : IReservationService
 
         if (hasConflict)
             throw new InvalidOperationException("The classroom is already booked for this time slot.");
+        if (request.AttendeeCount.HasValue && request.AttendeeCount.Value > classroom.Capacity)
+            throw new ArgumentException($"Attendee count ({request.AttendeeCount.Value}) exceeds classroom capacity ({classroom.Capacity}).");
 
         var reservation = new Reservation
         {
