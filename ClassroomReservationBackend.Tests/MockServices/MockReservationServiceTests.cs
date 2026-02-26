@@ -158,4 +158,31 @@ public class MockReservationServiceTests
         var result = await _service.GetAllAsync(filter);
         Assert.That(result, Is.Empty);
     }
+    [Test]
+    public async Task CreateAsync_WhenStartTimeBeforeWorkingHours_ThrowsArgumentException()
+    {
+        var request = new CreateReservationRequest
+        {
+            ClassroomId = Guid.NewGuid(),
+            Title = "Test",
+            StartTime = DateTime.UtcNow.Date.AddDays(1).AddHours(6),
+            EndTime = DateTime.UtcNow.Date.AddDays(1).AddHours(9)
+        };
+        Assert.ThrowsAsync<ArgumentException>(() =>
+            _service.CreateAsync(Guid.NewGuid(), request));
+    }
+
+    [Test]
+    public async Task CreateAsync_WhenEndTimeAfterWorkingHours_ThrowsArgumentException()
+    {
+        var request = new CreateReservationRequest
+        {
+            ClassroomId = Guid.NewGuid(),
+            Title = "Test",
+            StartTime = DateTime.UtcNow.Date.AddDays(1).AddHours(18),
+            EndTime = DateTime.UtcNow.Date.AddDays(1).AddHours(21)
+        };
+        Assert.ThrowsAsync<ArgumentException>(() =>
+            _service.CreateAsync(Guid.NewGuid(), request));
+    }
 }
